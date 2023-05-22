@@ -1,5 +1,10 @@
 return {
-
+    Controls = {
+        PoliceLights = 'Q', 
+        policeHorn   = 'E',
+        sirenToggle  = 'LMENU',
+        sirenCycle   = 'R',
+    },
     addonHorns = {
         [`firetruk`] = 'VEHICLES_HORNS_FIRETRUCK_WARNING'
     },

@@ -138,7 +138,7 @@ end)
 local policeLights = lib.addKeybind({
     name = 'policeLights',
     description = 'Press this button to use your siren',
-    defaultKey = 'Q',
+    defaultKey = Config.PoliceLights,
     onPressed = function()
         if not isVehAllowed() then return end
 
@@ -185,7 +185,7 @@ end)
 local policeHorn = lib.addKeybind({
     name = 'policeHorn',
     description = 'Hold this button to use your vehicle Horn',
-    defaultKey = 'E',
+    defaultKey = Config.policeHorn,
     onPressed = function()
         if not isVehAllowed() then return end
 
@@ -245,7 +245,7 @@ end)
 local sirenToggle = lib.addKeybind({
     name = 'sirenToggle',
     description = 'Press this button to use your siren',
-    defaultKey = 'LMENU',
+    defaultKey = Config.sirenToggle,
     onPressed = function()
         if not isVehAllowed() then return end
 
@@ -267,7 +267,7 @@ local Rpressed = false
 lib.addKeybind({
     name = 'sirenCycle',
     description = 'Press this button to cycle through your sirens',
-    defaultKey = 'R',
+    defaultKey = Config.sirenCycle,
     onPressed = function()
         if not isVehAllowed() then return end
 
