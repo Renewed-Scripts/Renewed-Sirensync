@@ -12,7 +12,7 @@ The resource works closer to LVC than Pma Sirensync did, here's a quick rundown 
 
 `ALT` - (Left ALT) is used to toggle the vehicle sirens can only be used if the lights are toggled on.
 
-**NOTE**: If another resource fails to use `ReleaseSoundId(soundId)` after using `GetSoundId()`, it may break the sounds in this resource as the sound limit gets reached. Oh and the config is the shared/shared.ts file
+**NOTE**: If another resource fails to use `ReleaseSoundId(soundId)` after using `GetSoundId()`, it may break the sounds in this resource as the sound limit gets reached
 
 If you wish to change any keybinds you can do so in the client.lua
 
