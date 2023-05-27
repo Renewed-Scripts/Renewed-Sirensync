@@ -185,7 +185,7 @@ end)
 local policeHorn = lib.addKeybind({
     name = 'policeHorn',
     description = 'Hold this button to use your vehicle Horn',
-    defaultKey = Config.Controls.PoliceHorn,
+    defaultKey = Config.Controls.policeHorn,
     onPressed = function()
         if not isVehAllowed() then return end
 
