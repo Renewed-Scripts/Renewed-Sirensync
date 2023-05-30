@@ -55,7 +55,7 @@ CreateThread(function()
 
         for veh, soundId in pairs(hornVehicles) do
             if releaseSound(veh, soundId, true) then
-                hornVehicles = nil
+                hornVehicles[veh] = nil
             end
         end
 
