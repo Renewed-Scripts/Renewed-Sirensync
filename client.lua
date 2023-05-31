@@ -86,6 +86,7 @@ lib.onCache('seat', function(seat)
             DisableControlAction(0, 82, true) -- ,
             DisableControlAction(0, 83, true) -- =
             DisableControlAction(0, 84, true) -- -
+            DisableControlAction(0, 85, true) -- Q
             DisableControlAction(0, 86, true) -- E
             DisableControlAction(0, 172, true) -- Up arrow
             Wait(0)
