@@ -121,25 +121,19 @@ local function stateBagWrapper(keyFilter, cb)
     return AddStateBagChangeHandler(keyFilter, '', function(bagName, _, value, _, replicated)
         local netId = tonumber(bagName:gsub('entity:', ''), 10)
 
-        local timeout = GetGameTimer() + 1500
+        local loaded = netId and lib.waitFor(function()
+            if NetworkDoesEntityExistWithNetworkId(netId) then return true end
+        end, 'Timeout while waiting for entity to exist', 1500)
 
-        while not NetworkDoesEntityExistWithNetworkId(netId) do
-            if timeout < GetGameTimer() then
-                print('Renewed-Sirensync: Timeout while waiting for entity to exist')
-                return
+        local entity = loaded and NetToVeh(netId)
+
+        if entity then
+            local amOwner = NetworkGetEntityOwner(entity) == cache.playerId
+
+            if amOwner == replicated then
+                cb(entity, value)
             end
-
-            Wait(0)
         end
-
-        local entity = NetToVeh(netId)
-
-        local amOwner = NetworkGetEntityOwner(entity) == cache.playerId
-        if (not amOwner and replicated) or (amOwner and not replicated) then
-            return
-        end
-
-        cb(entity, value)
     end)
 end
 
