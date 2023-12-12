@@ -35,7 +35,7 @@ local function releaseSound(veh, soundId, forced)
 end
 
 local function isVehAllowed()
-    if not cache.vehicle or not cache.seat or cache.seat ~= -1 or GetVehicleClass(cache.vehicle) ~= 18 or IsPedInAnyHeli(cache.vehicle) or IsPedInAnyPlane(cache.vehicle) then
+    if cache.seat ~= -1 or GetVehicleClass(cache.vehicle) ~= 18 or IsPedInAnyHeli(cache.vehicle) or IsPedInAnyPlane(cache.vehicle) then
         return false
     end
 
@@ -94,14 +94,9 @@ lib.onCache('seat', function(seat)
 end)
 
 lib.onCache('vehicle', function(value)
-    if value then return end
-    if cache.seat ~= -1 then return end
+    if value or cache.seat ~= -1 then return end
 
-    local oldVeh = cache.vehicle
-
-    if GetVehicleClass(oldVeh) ~= 18 then return end
-
-    local state = Entity(oldVeh).state
+    local state = Entity(cache.vehicle).state
 
     if not state.stateEnsured then return end
 
@@ -209,9 +204,7 @@ local policeHorn = lib.addKeybind({
         state:set('horn', not state.horn, true)
     end,
     onReleased = function()
-        if not cache.vehicle then return end
-
-        if GetVehicleClass(cache.vehicle) ~= 18 then return end
+        if not cache.vehicle or GetVehicleClass(cache.vehicle) ~= 18 then return end
 
         local state = Entity(cache.vehicle).state
 
@@ -312,16 +305,16 @@ lib.addKeybind({
         policeLights:disable(false)
         policeHorn:disable(false)
 
-        if not cache.vehicle then return end
-
-        SetTimeout(0, function()
-            local state = Entity(cache.vehicle).state
-
-            if state.sirenMode > 0 then
-                state:set('sirenMode', 0, true)
-            end
-
-            Rpressed = false
-        end)
+        if cache.vehicle then
+            SetTimeout(0, function()
+                local state = Entity(cache.vehicle).state
+    
+                if state.sirenMode > 0 then
+                    state:set('sirenMode', 0, true)
+                end
+    
+                Rpressed = false
+            end)
+        end
     end
 })
