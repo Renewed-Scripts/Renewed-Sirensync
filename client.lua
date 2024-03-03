@@ -118,7 +118,7 @@ local function stateBagWrapper(keyFilter, cb)
 
         local loaded = netId and lib.waitFor(function()
             if NetworkDoesEntityExistWithNetworkId(netId) then return true end
-        end, 'Timeout while waiting for entity to exist', 1500)
+        end, 'Timeout while waiting for entity to exist', 5000)
 
         local entity = loaded and NetToVeh(netId)
 
@@ -164,7 +164,6 @@ local policeLights = lib.addKeybind({
 -- Police Horns --
 
 local restoreSiren = 0
-local didSiren = false
 
 stateBagWrapper('horn', function(veh, value)
     local relHornId = hornVehicles[veh]
@@ -308,11 +307,11 @@ lib.addKeybind({
         if cache.vehicle then
             SetTimeout(0, function()
                 local state = Entity(cache.vehicle).state
-    
+
                 if state.sirenMode > 0 then
                     state:set('sirenMode', 0, true)
                 end
-    
+
                 Rpressed = false
             end)
         end
