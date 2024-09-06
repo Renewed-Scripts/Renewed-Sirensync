@@ -1,3 +1,5 @@
+lib.versionCheck('Renewed-Scripts/Renewed-Sirensync')
+
 RegisterNetEvent('Renewed-Sirensync:server:SyncState', function(vehNet)
     local veh = NetworkGetEntityFromNetworkId(vehNet)
 
