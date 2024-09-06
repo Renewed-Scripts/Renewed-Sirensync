@@ -1,6 +1,6 @@
 return {
     Controls = {
-        PoliceLights = 'Q', 
+        PoliceLights = 'Q',
         policeHorn   = 'E',
         sirenToggle  = 'LMENU',
         sirenCycle   = 'R',
