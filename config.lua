@@ -18,7 +18,7 @@ return {
         [`ambulance`] = true,
     },
 
-    sirenShutOff = true -- Set to true if you want the siren to automatically shut off when the player exits the vehicle
+    sirenShutOff = true, -- Set to true if you want the siren to automatically shut off when the player exits the vehicle
 
     disableDamagedSirens = false, -- Set to true if you want to disable the damaged siren
     useEngineHealth = false, -- Determine wether to use engine health over body health for siren damage
