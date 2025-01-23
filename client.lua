@@ -175,7 +175,7 @@ stateBagWrapper('horn', function(veh, value)
 
     hornVehicles[veh] = soundId
     local vehModel = GetEntityModel(veh)
-    local soundName = config.addonHorns[vehModel] or config.fireModels[vehModel] and 'VEHICLES_HORNS_FIRETRUCK_WARNING' or 'SIRENS_AIRHORN'
+    local soundName = config.addonHorns?[vehModel]?.audioName or config.fireModels[vehModel] and 'VEHICLES_HORNS_FIRETRUCK_WARNING' or 'SIRENS_AIRHORN'
 
     ---@diagnostic disable-next-line: param-type-mismatch
     PlaySoundFromEntity(soundId, soundName, veh, 0, false, 0)
