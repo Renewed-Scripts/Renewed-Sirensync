@@ -13,4 +13,4 @@ client_script 'client.lua'
 
 server_script 'server.lua'
 
-file 'Config.lua'
+file 'config.lua'

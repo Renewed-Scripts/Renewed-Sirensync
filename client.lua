@@ -1,9 +1,8 @@
-local Config = require 'Config'
+local config = require 'config'
 
 -- soundId Tables --
 local sirenVehicles = {}
 local hornVehicles = {}
-
 
 -- Natives Used --
 local Wait = Wait
@@ -24,6 +23,9 @@ local AddStateBagChangeHandler = AddStateBagChangeHandler
 local NetworkGetEntityOwner = NetworkGetEntityOwner
 local SetVehicleHasMutedSirens = SetVehicleHasMutedSirens
 local SetVehicleSiren = SetVehicleSiren
+local GetEntityModel = GetEntityModel
+local GetVehicleEngineHealth = GetVehicleEngineHealth
+local GetVehicleBodyHealth = GetVehicleBodyHealth
 
 -- Localized Functions --
 local function releaseSound(veh, soundId, forced)
@@ -41,7 +43,6 @@ local function isVehAllowed()
 
     return true
 end
-
 
 -- Cleanup Loop --
 CreateThread(function()
@@ -61,9 +62,6 @@ CreateThread(function()
         Wait(1000)
     end
 end)
-
-
-
 
 -- Cache Events --
 lib.onCache('seat', function(seat)
@@ -100,7 +98,7 @@ lib.onCache('vehicle', function(value)
 
     if not state.stateEnsured then return end
 
-    if Config.sirenShutOff then
+    if config.sirenShutOff then
         if state.sirenMode ~= 0 then
             state:set('sirenMode', 0, true)
         end
@@ -141,7 +139,7 @@ end)
 local policeLights = lib.addKeybind({
     name = 'policeLights',
     description = 'Press this button to use your siren',
-    defaultKey = Config.Controls.PoliceLights,
+    defaultKey = config.controls.policeLights,
     onPressed = function()
         if not isVehAllowed() then return end
 
@@ -160,11 +158,8 @@ local policeLights = lib.addKeybind({
     end
 })
 
-
 -- Police Horns --
-
 local restoreSiren = 0
-
 stateBagWrapper('horn', function(veh, value)
     local relHornId = hornVehicles[veh]
 
@@ -179,15 +174,17 @@ stateBagWrapper('horn', function(veh, value)
     local soundId = GetSoundId()
 
     hornVehicles[veh] = soundId
-    local soundName = Config.addonHorns[GetEntityModel(veh)] or 'SIRENS_AIRHORN'
+    local vehModel = GetEntityModel(veh)
+    local soundName = config.addonHorns[vehModel] or config.fireModels[vehModel] and 'VEHICLES_HORNS_FIRETRUCK_WARNING' or 'SIRENS_AIRHORN'
 
+    ---@diagnostic disable-next-line: param-type-mismatch
     PlaySoundFromEntity(soundId, soundName, veh, 0, false, 0)
 end)
 
 local policeHorn = lib.addKeybind({
     name = 'policeHorn',
     description = 'Hold this button to use your vehicle Horn',
-    defaultKey = Config.Controls.policeHorn,
+    defaultKey = config.controls.policeHorn,
     onPressed = function()
         if not isVehAllowed() then return end
 
@@ -236,19 +233,28 @@ stateBagWrapper('sirenMode', function(veh, soundMode)
     local soundId = GetSoundId()
     sirenVehicles[veh] = soundId
 
-    if soundMode == 1 then
-        PlaySoundFromEntity(soundId, 'VEHICLES_HORNS_SIREN_1', veh, 0, false, 0)
-    elseif soundMode == 2 then
-        PlaySoundFromEntity(soundId, 'VEHICLES_HORNS_SIREN_2', veh, 0, false, 0)
-    elseif soundMode == 3 then
-        PlaySoundFromEntity(soundId, 'VEHICLES_HORNS_POLICE_WARNING', veh, 0, false, 0)
+    local audioName
+
+    if not config.disableDamagedSirens and (config.useEngineHealth and GetVehicleEngineHealth(cache.vehicle) or GetVehicleBodyHealth(cache.vehicle)) <= config.damageThreshold then
+        audioName = 'PLAYER_FUCKED_SIREN'
+    elseif config.fireModels[GetEntityModel(veh)] then
+        audioName = soundMode == 1 and 'RESIDENT_VEHICLES_SIREN_FIRETRUCK_QUICK_01' or soundMode == 2 and 'RESIDENT_VEHICLES_SIREN_FIRETRUCK_WAIL_01' or 'VEHICLES_HORNS_AMBULANCE_WARNING'
+    else
+        audioName = soundMode == 1 and 'VEHICLES_HORNS_SIREN_1' or soundMode == 2 and 'VEHICLES_HORNS_SIREN_2' or 'VEHICLES_HORNS_POLICE_WARNING'
     end
+
+    if not audioName then
+        return lib.print.error('No audioName found for siren mode %d on vehicle model %s', soundMode, vehModel)
+    end
+
+    ---@diagnostic disable-next-line: param-type-mismatch
+    PlaySoundFromEntity(soundId, audioName, veh, 0, false, 0)
 end)
 
 local sirenToggle = lib.addKeybind({
     name = 'sirenToggle',
     description = 'Press this button to use your siren',
-    defaultKey = Config.Controls.sirenToggle,
+    defaultKey = config.controls.sirenToggle,
     onPressed = function()
         if not isVehAllowed() then return end
 
@@ -264,12 +270,11 @@ local sirenToggle = lib.addKeybind({
     end
 })
 
-
 local Rpressed = false
 lib.addKeybind({
     name = 'sirenCycle',
     description = 'Press this button to cycle through your sirens',
-    defaultKey = Config.Controls.sirenCycle,
+    defaultKey = config.controls.sirenCycle,
     onPressed = function()
         if not isVehAllowed() then return end
 
