@@ -1,4 +1,4 @@
-local Config = require 'Config'
+local Config = lib.load('Config')
 
 -- soundId Tables --
 local sirenVehicles = {}
@@ -141,7 +141,7 @@ end)
 local policeLights = lib.addKeybind({
     name = 'policeLights',
     description = 'Press this button to use your siren',
-    defaultKey = Config.Controls.PoliceLights,
+    defaultKey = Config.Controls.policeLights,
     onPressed = function()
         if not isVehAllowed() then return end
 
@@ -179,9 +179,15 @@ stateBagWrapper('horn', function(veh, value)
     local soundId = GetSoundId()
 
     hornVehicles[veh] = soundId
-    local soundName = Config.addonHorns[GetEntityModel(veh)] or 'SIRENS_AIRHORN'
+    local modelName = GetEntityModel(veh)
+    local audioRef, soundName, addonSiren = 0, Config.addonHorns[modelName] or 'SIRENS_AIRHORN', Config.addonSirens[modelName]
 
-    PlaySoundFromEntity(soundId, soundName, veh, 0, false, 0)
+    if addonSiren then
+        audioRef = addonSiren.ref
+        soundName = addonSiren.horn
+    end
+
+    PlaySoundFromEntity(soundId, soundName, veh, audioRef, false, 0)
 end)
 
 local policeHorn = lib.addKeybind({
@@ -235,13 +241,20 @@ stateBagWrapper('sirenMode', function(veh, soundMode)
 
     local soundId = GetSoundId()
     sirenVehicles[veh] = soundId
+    local audioRef, addonSiren = 0, Config.addonSirens[GetEntityModel(veh)]
+    local soundA, soundB, soundC = 'VEHICLES_HORNS_SIREN_1', 'VEHICLES_HORNS_SIREN_2', 'VEHICLES_HORNS_POLICE_WARNING'
+
+    if addonSiren then
+        audioRef = addonSiren.ref
+        soundA, soundB, soundC = addonSiren.a, addonSiren.b, addonSiren.c
+    end
 
     if soundMode == 1 then
-        PlaySoundFromEntity(soundId, 'VEHICLES_HORNS_SIREN_1', veh, 0, false, 0)
+        PlaySoundFromEntity(soundId, soundA, veh, audioRef, false, 0)
     elseif soundMode == 2 then
-        PlaySoundFromEntity(soundId, 'VEHICLES_HORNS_SIREN_2', veh, 0, false, 0)
+        PlaySoundFromEntity(soundId, soundB, veh, audioRef, false, 0)
     elseif soundMode == 3 then
-        PlaySoundFromEntity(soundId, 'VEHICLES_HORNS_POLICE_WARNING', veh, 0, false, 0)
+        PlaySoundFromEntity(soundId, soundC, veh, audioRef, false, 0)
     end
 end)
 
