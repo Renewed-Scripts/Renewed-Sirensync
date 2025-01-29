@@ -1,4 +1,4 @@
-local config = require 'config'
+local config = lib.load('config')
 
 -- soundId Tables --
 local sirenVehicles = {}
@@ -175,11 +175,19 @@ stateBagWrapper('horn', function(veh, value)
 
     hornVehicles[veh] = soundId
     local vehModel = GetEntityModel(veh)
-    local soundName = config.addonHorns?[vehModel]?.audioName or config.fireModels[vehModel] and 'VEHICLES_HORNS_FIRETRUCK_WARNING' or 'SIRENS_AIRHORN'
-    local audioRef = config.addonHorns?[vehModel]?.audioRef or 0
+    local audioName = 'SIRENS_AIRHORN' -- Default sound
+    local audioRef
+
+    for _, sirenConfig in pairs(config.sirens) do
+        if (not sirenConfig.models or sirenConfig.models[vehModel]) and sirenConfig.sirenModes.horn then
+            audioName = sirenConfig.sirenModes.horn?.audioName or audioName
+            audioRef = sirenConfig.sirenModes.horn?.audioRef or audioRef
+            -- no break here, allows it to take the base config and if there's another valid config after, replace it.
+        end
+    end
 
     ---@diagnostic disable-next-line: param-type-mismatch
-    PlaySoundFromEntity(soundId, soundName, veh, audioRef, false, 0)
+    PlaySoundFromEntity(soundId, audioName, veh, audioRef or 0, false, 0)
 end)
 
 local policeHorn = lib.addKeybind({
@@ -235,16 +243,27 @@ stateBagWrapper('sirenMode', function(veh, soundMode)
     sirenVehicles[veh] = soundId
 
     local audioName
+    local audioRef
+
     if not config.disableDamagedSirens and (config.useEngineHealth and GetVehicleEngineHealth(cache.vehicle) or GetVehicleBodyHealth(cache.vehicle)) <= config.damageThreshold then
         audioName = 'PLAYER_FUCKED_SIREN'
-    elseif config.fireModels[GetEntityModel(veh)] then
-        audioName = soundMode == 1 and 'RESIDENT_VEHICLES_SIREN_FIRETRUCK_QUICK_01' or soundMode == 2 and 'RESIDENT_VEHICLES_SIREN_FIRETRUCK_WAIL_01' or 'VEHICLES_HORNS_AMBULANCE_WARNING'
     else
-        audioName = soundMode == 1 and 'VEHICLES_HORNS_SIREN_1' or soundMode == 2 and 'VEHICLES_HORNS_SIREN_2' or 'VEHICLES_HORNS_POLICE_WARNING'
+        local vehModel = GetEntityModel(veh)
+        for _, sirenConfig in pairs(config.sirens) do
+            if (not sirenConfig.models or sirenConfig.models[vehModel]) and sirenConfig.sirenModes[soundMode] then
+                audioName = sirenConfig.sirenModes[soundMode]?.audioName or audioName
+                audioRef = sirenConfig.sirenModes[soundMode]?.audioRef or audioRef
+                -- no break here, allows it to take the base config and if there's another valid config after, replace it.
+        end
+        end
+    end
+
+    if not audioName then
+        return lib.print.error(('No sound found for siren mode %d on vehicle model (hash) %s'):format(soundMode, vehModel))
     end
 
     ---@diagnostic disable-next-line: param-type-mismatch
-    PlaySoundFromEntity(soundId, audioName, veh, 0, false, 0)
+    PlaySoundFromEntity(soundId, audioName, veh, audioRef or 0, false, 0)
 end)
 
 local sirenToggle = lib.addKeybind({
