@@ -29,6 +29,9 @@ You can refer to the type annotations, but here is an example:
 
 ```lua
 sirens = {
+    -- make sure to keep the base sirens ABOVE the addon sirens
+    base = { ... },
+
     addonSirenGroup1 = {
         sirenModes = {
             --[[
