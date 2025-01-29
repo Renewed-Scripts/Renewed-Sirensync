@@ -78,13 +78,13 @@ lib.onCache('seat', function(seat)
         end
 
         while cache.seat == -1 do
-            DisableControlAction(0, 80, true) -- R
-            DisableControlAction(0, 81, true) -- .
-            DisableControlAction(0, 82, true) -- ,
-            DisableControlAction(0, 83, true) -- =
-            DisableControlAction(0, 84, true) -- -
-            DisableControlAction(0, 85, true) -- Q
-            DisableControlAction(0, 86, true) -- E
+            DisableControlAction(0, 80, true)  -- R
+            DisableControlAction(0, 81, true)  -- .
+            DisableControlAction(0, 82, true)  -- ,
+            DisableControlAction(0, 83, true)  -- =
+            DisableControlAction(0, 84, true)  -- -
+            DisableControlAction(0, 85, true)  -- Q
+            DisableControlAction(0, 86, true)  -- E
             DisableControlAction(0, 172, true) -- Up arrow
             Wait(0)
         end
@@ -254,7 +254,7 @@ stateBagWrapper('sirenMode', function(veh, soundMode)
                 audioName = sirenConfig.sirenModes[soundMode]?.audioName or audioName
                 audioRef = sirenConfig.sirenModes[soundMode]?.audioRef or audioRef
                 -- no break here, allows it to take the base config and if there's another valid config after, replace it.
-        end
+            end
         end
     end
 
