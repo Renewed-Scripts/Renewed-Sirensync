@@ -29,7 +29,7 @@ You can refer to the type annotations, but here is an example:
 
 ```lua
 sirens = {
-    cencom = {
+    addonSirenGroup1 = {
         sirenModes = {
             --[[
             This table has to be in the correct order, only 3 sirenModes (or steps (when pressing R) if you prefer) are supported
