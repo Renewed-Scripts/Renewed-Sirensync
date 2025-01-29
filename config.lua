@@ -21,10 +21,11 @@ return {
     useEngineHealth = false,      -- Determine wether to use engine health over body health for siren damage
     damageThreshold = 300,        -- If the vehicle's health is below this value, the siren will be considered damaged
 
-    ---@type table<string, SirenConfigTable>
+    ---@type table<number, SirenConfigTable>
     --- Configure what siren sounds to use for a specific model and siren mode
     sirens = {
-        base = {
+        --base
+        {
             sirenModes = {
                 { audioName = 'VEHICLES_HORNS_SIREN_1' },
                 { audioName = 'VEHICLES_HORNS_SIREN_2' },
@@ -36,7 +37,8 @@ return {
             }
         },
 
-        fire = {
+        --fire
+        {
             sirenModes = {
                 { audioName = 'RESIDENT_VEHICLES_SIREN_FIRETRUCK_QUICK_01' },
                 { audioName = 'RESIDENT_VEHICLES_SIREN_FIRETRUCK_WAIL_01' },
@@ -53,7 +55,8 @@ return {
             }
         },
 
-        unmarked = {
+        --unmarked
+        {
             sirenModes = {
                 { audioName = 'RESIDENT_VEHICLES_SIREN_WAIL_02' },
                 { audioName = 'RESIDENT_VEHICLES_SIREN_QUICK_02' }
@@ -66,7 +69,8 @@ return {
             }
         },
 
-        bikes = {
+        --bikes
+        {
             sirenModes = {
                 { audioName = 'RESIDENT_VEHICLES_SIREN_WAIL_03' },
                 { audioName = 'RESIDENT_VEHICLES_SIREN_QUICK_03' }

@@ -178,10 +178,12 @@ stateBagWrapper('horn', function(veh, value)
     local audioName = 'SIRENS_AIRHORN' -- Default sound
     local audioRef
 
-    for _, sirenConfig in pairs(config.sirens) do
-        if (not sirenConfig.models or sirenConfig.models[vehModel]) and sirenConfig.sirenModes.horn then
-            audioName = sirenConfig.sirenModes.horn?.audioName or audioName
-            audioRef = sirenConfig.sirenModes.horn?.audioRef or audioRef
+    for i = 1, #config.sirens do
+        local sirenConfig = config.sirens[i]
+
+        if (not sirenConfig.models or sirenConfig.models[vehModel]) and sirenConfig.horn then
+            audioName = sirenConfig.horn?.audioName or audioName
+            audioRef = sirenConfig.horn?.audioRef or audioRef
             -- no break here, allows it to take the base config and if there's another valid config after, replace it.
         end
     end
@@ -249,7 +251,8 @@ stateBagWrapper('sirenMode', function(veh, soundMode)
         audioName = 'PLAYER_FUCKED_SIREN'
     else
         local vehModel = GetEntityModel(veh)
-        for _, sirenConfig in pairs(config.sirens) do
+        for i = 1, #config.sirens do
+            local sirenConfig = config.sirens[i]
             if (not sirenConfig.models or sirenConfig.models[vehModel]) and sirenConfig.sirenModes[soundMode] then
                 audioName = sirenConfig.sirenModes[soundMode]?.audioName or audioName
                 audioRef = sirenConfig.sirenModes[soundMode]?.audioRef or audioRef
