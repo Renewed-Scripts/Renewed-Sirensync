@@ -30,9 +30,11 @@ You can refer to the type annotations, but here is an example:
 ```lua
 sirens = {
     -- make sure to keep the base sirens ABOVE the addon sirens
-    base = { ... },
+    --base
+    { ... },
 
-    addonSirenGroup1 = {
+    --Addon Group 1 (just a name for your reference)
+    {
         sirenModes = {
             --[[
             This table has to be in the correct order, only 3 sirenModes (or steps (when pressing R) if you prefer) are supported
