@@ -23,6 +23,41 @@ If you wish to change any keybinds you can do so in the client.lua
 - Place both resources into your server (make sure ox_lib is started before renewed sirensync)
 - and enjoy :)
 
+## Addon Sirens
+If you have a server sided siren pack you can replace the sirens used in the `config.lua`. You can create "groups" of models that use the same siren sounds.
+You can refer to the type annotations, but here is an example:
+
+```lua
+sirens = {
+    -- make sure to keep the base sirens ABOVE the addon sirens
+    base = { ... },
+
+    addonSirenGroup1 = {
+        sirenModes = {
+            --[[
+            This table has to be in the correct order, only 3 sirenModes (or steps (when pressing R) if you prefer) are supported
+            (You can specify the index of the sirenMode, but it's not necessary)
+            (that's what i mean:)
+                [1] = { ... }
+            ]]
+            { audioName = 'VEHAUD_LSPD_NEW_SIREN_ADAM',   audioRef = "VEHAUD_LSPD_NEW_SOUNDSET" }, -- First sirenMode
+            { audioName = 'VEHAUD_LSPD_NEW_SIREN_BOY',   audioRef = "VEHAUD_LSPD_NEW_SOUNDSET" }, -- Second sirenMode
+            { audioName = 'VEHAUD_LSPD_NEW_SIREN_CHARLES', audioRef = "VEHAUD_LSPD_NEW_SOUNDSET" }, -- Third sirenMode
+        },
+
+        horn = {
+            audioName = 'VEHAUD_LSPD_NEW_HORN'
+            audioRef = "VEHAUD_LSPD_NEW_SOUNDSET"
+        },
+
+        models = {
+            [`police5`] = true,
+            [`polgauntlet`] = true,
+        }
+    },
+}
+```
+
 ## Credits
 
 * [AvarianKnight](https://github.com/AvarianKnight) Original creator of PMA Sirensync.
