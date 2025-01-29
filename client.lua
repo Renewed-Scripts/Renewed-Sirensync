@@ -259,7 +259,7 @@ stateBagWrapper('sirenMode', function(veh, soundMode)
     end
 
     if not audioName then
-        return lib.print.error(('No sound found for siren mode %d on vehicle model (hash) %s'):format(soundMode, vehModel))
+        return lib.print.error(('No sound found for siren mode %d on vehicle model (hash) %s'):format(soundMode, GetEntityModel(veh)))
     end
 
     ---@diagnostic disable-next-line: param-type-mismatch
