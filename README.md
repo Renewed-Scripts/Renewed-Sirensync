@@ -23,6 +23,22 @@ If you wish to change any keybinds you can do so in the client.lua
 - Place both resources into your server (make sure ox_lib is started before renewed sirensync)
 - and enjoy :)
 
+## Addon Sirens
+
+If you have a server sided siren pack you can replace the sirens used in the `Config.lua`. You will need to add an entry for each model, for example:
+
+```lua
+addonSirens = {
+    [`police5`] = {
+        ref = 'VEHAUD_LSPD_NEW_SOUNDSET',
+        horn = 'VEHAUD_LSPD_NEW_HORN',
+        a = 'VEHAUD_LSPD_NEW_SIREN_ADAM',
+        b = 'VEHAUD_LSPD_NEW_SIREN_BOY',
+        c = 'VEHAUD_LSPD_NEW_SIREN_CHARLES'
+    }
+}
+```
+
 ## Credits
 
 * [AvarianKnight](https://github.com/AvarianKnight) Original creator of PMA Sirensync.
