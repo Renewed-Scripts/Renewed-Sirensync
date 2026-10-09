@@ -74,7 +74,7 @@ lib.onCache('seat', function(seat)
         SetVehicleRadioEnabled(cache.vehicle, false)
 
         if not Entity(cache.vehicle).state.stateEnsured then
-            TriggerServerEvent('Renewed-Sirensync:server:SyncState', VehToNet(cache.vehicle))
+            TriggerServerEvent('Renewed-Sirensync:server:SyncState')
         end
 
         while cache.seat == -1 do
